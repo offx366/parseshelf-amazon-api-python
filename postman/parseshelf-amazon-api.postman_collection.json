@@ -1,0 +1,59 @@
+{
+  "info": {
+    "name": "ParseShelf Amazon API",
+    "description": "Create Amazon parsing jobs, poll progress, and download structured CSV or JSONL exports.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Amazon job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{PARSESHELF_API_KEY}}"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "url": "{{PARSESHELF_BASE_URL}}/api/v1/jobs",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"marketplace\": \"amazon\",\n  \"input_type\": \"search_url\",\n  \"input_value\": \"https://www.amazon.com/s?k=vitamin+c+serum\",\n  \"mode\": \"full_product\",\n  \"target_count\": 25\n}"
+        }
+      }
+    },
+    {
+      "name": "Read job status",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{PARSESHELF_API_KEY}}"}
+        ],
+        "url": "{{PARSESHELF_BASE_URL}}/api/v1/jobs/{{JOB_ID}}"
+      }
+    },
+    {
+      "name": "Download CSV export",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{PARSESHELF_API_KEY}}"}
+        ],
+        "url": "{{PARSESHELF_BASE_URL}}/api/v1/jobs/{{JOB_ID}}/download/csv"
+      }
+    },
+    {
+      "name": "Download JSONL export",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{PARSESHELF_API_KEY}}"}
+        ],
+        "url": "{{PARSESHELF_BASE_URL}}/api/v1/jobs/{{JOB_ID}}/download/jsonl"
+      }
+    }
+  ],
+  "variable": [
+    {"key": "PARSESHELF_BASE_URL", "value": "https://parseshelf.com"},
+    {"key": "PARSESHELF_API_KEY", "value": ""},
+    {"key": "JOB_ID", "value": ""}
+  ]
+}

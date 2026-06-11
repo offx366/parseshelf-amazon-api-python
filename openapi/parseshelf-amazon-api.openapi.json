@@ -1,0 +1,153 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ParseShelf Amazon API",
+    "version": "1.0.0",
+    "description": "Create Amazon parsing jobs, poll job status and download JSONL, CSV, XLSX or Markdown exports."
+  },
+  "servers": [
+    {
+      "url": "https://parseshelf.com"
+    }
+  ],
+  "paths": {
+    "/api/v1/jobs": {
+      "post": {
+        "summary": "Create an Amazon parsing job",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJobRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created job"
+          }
+        }
+      }
+    },
+    "/api/v1/jobs/{job_id}": {
+      "get": {
+        "summary": "Read Amazon job status",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job status"
+          }
+        }
+      }
+    },
+    "/api/v1/jobs/{job_id}/download/{format}": {
+      "get": {
+        "summary": "Download job export",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "jsonl",
+                "csv",
+                "xlsx",
+                "md"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Export file"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "CreateJobRequest": {
+        "type": "object",
+        "required": [
+          "marketplace",
+          "input_type",
+          "input_value",
+          "mode",
+          "target_count"
+        ],
+        "properties": {
+          "marketplace": {
+            "type": "string",
+            "const": "amazon"
+          },
+          "input_type": {
+            "type": "string",
+            "enum": [
+              "search_url",
+              "category_url",
+              "product_url_list",
+              "asin_list"
+            ]
+          },
+          "input_value": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "listing_only",
+              "full_product"
+            ]
+          },
+          "target_count": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    }
+  }
+}
